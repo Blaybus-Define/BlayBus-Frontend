@@ -14,6 +14,7 @@ import NoticeDetailScreen from "./screens/notice/NoticeDetailScreen";
 import NoticeScreen from "./screens/notice/NoticeScreen";
 import ProfileSettingScreen from "./screens/ProfileSettingScreen";
 import NotificationScreen from "./screens/NotificationScreen";
+import QuestScreen from "./screens/QuestScreen";
 
 const Layout = () => (
   <div className="page">
@@ -87,6 +88,7 @@ function App() {
           <Route path="/notice/detail" element={<NoticeDetailScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/passwordchange" element={<PasswordChangeScreen />} />
+          <Route path="/quest" element={<QuestScreen />} />
         </Route>
         <Route
           path="/login"
