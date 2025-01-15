@@ -112,19 +112,15 @@ const QuestScreen = () => {
       {quests && quests.length > 0 ? (
   quests.map((quest, index) => (
     <RecentExperience
-    key={index}
-    title={quest.title || "제목 없음"}
-    badgeText={quest.achievedLevel || "N/A"}
-    maxBadgeText={quest.questFrequency || "MONTHLY"}
-    month={
-      quest.date
-        ? new Date(quest.date).toLocaleString("ko-KR", { month: "long" })
-        : "날짜 없음"
-    }
-    date={quest.date || "날짜 없음"}
-    count={`${quest.experience || 0} EXP`}
-    points={quest.experience || 0}
-  />
+      key={index}
+      title={quest.title || "제목 없음"}
+      badgeText={quest.achievedLevel || "N/A"}
+      maxBadgeText={quest.questFrequency || "MONTHLY"}
+      month={new Date(quest.date).toLocaleString("ko-KR", { month: "long" })}
+      date={quest.date || "날짜 없음"}
+      count={`${quest.experience || 0} EXP`}
+      points={quest.experience || 0}
+    />
   ))
 ) : (
   <div>퀘스트 데이터가 없습니다.</div>
