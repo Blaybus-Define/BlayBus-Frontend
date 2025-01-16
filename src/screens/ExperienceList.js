@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.css";
 import "../fonts/font.css";
 import colors from "../colors/colors";
 import arrowBack from "../images/arrow_back.png";
 import arrowDown from "../images/down_arrow.png";
-import { RecentExprience } from "../components/QuestExperience";
 import { MyExpBox } from "../components/MyExpBox";
 import PressableButton from "../components/PressableButton";
-import { Navigate, useNavigate } from "react-router-dom";
+import Modal from "../components/Modal/Modal"; 
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   container: {
@@ -56,6 +56,7 @@ const styles = {
     marginBottom: 14,
     marginLeft: 20,
     marginRight: 20,
+    cursor: "pointer",
   },
   statsText: {
     color: "#212124",
@@ -90,6 +91,15 @@ const styles = {
 
 const ExperienceList = ({ myLevel, myTotalExperience }) => {
   const navigate = useNavigate();
+  const [modalVisible, setModalVisible] = useState(false); 
+  const [selectedPeriod, setSelectedPeriod] = useState("전체기간"); 
+  const [selectedClass, setSelectedClass] = useState("전체");
+
+  const handleApplyFilters = (period, cls) => {
+    setSelectedPeriod(period); 
+    setSelectedClass(cls); 
+    setModalVisible(false); 
+  };
 
   return (
     <div className="page" style={styles.container}>
@@ -105,17 +115,23 @@ const ExperienceList = ({ myLevel, myTotalExperience }) => {
       <div style={{ width: "100%", padding: "0px 20px" }}>
         <MyExpBox levelName={myLevel} totalExperience={myTotalExperience} />
       </div>
-      <div style={styles.statsContainer}>
-        <span style={styles.statsText}>총</span>
-        <span style={styles.statsBoldText}>4</span>
-        <span style={styles.statsText}>건</span>
-        <div style={styles.flexSpacer} />
-        <span style={styles.statsText}>전체기간</span>
+      <div
+        style={styles.statsContainer}
+        onClick={() => setModalVisible(true)} 
+      >
+        <span style={styles.statsText}>{selectedPeriod}</span>
         <span style={styles.statsDivider}>·</span>
-        <span style={styles.statsText}>전체</span>
+        <span style={styles.statsText}>{selectedClass}</span>
         <img src={arrowDown} style={styles.arrowImage} alt="icon" />
       </div>
       <div style={styles.card} />
+      {modalVisible && (
+        <Modal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)} // 모달 닫기
+          onApply={handleApplyFilters} 
+        />
+      )}
     </div>
   );
 };
