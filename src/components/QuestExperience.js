@@ -1,16 +1,35 @@
 import React from "react";
-import dart from "../images/exp/exp_dart.png";
+import dart from "../images/exp/exp_dart.png"; // 기본 아이콘
+import TaskIcon from "../images/exp/duty_image.png"; // 직무 아이콘
+import LeaderAssignmentIcon from "../images/exp/leader_image.png"; // 리더 부여 아이콘
 import colors from "../colors/colors";
 
+const QuestExperience = ({
+  title,
+  badgeText,
+  maxBadgeText,
+  month,
+  date,
+  count,
+  points,
+}) => {
+  const isIncomplete = maxBadgeText === "미완성"; // "미완성" 여부 확인
 
-const QuestExperience = ({ title, badgeText, maxBadgeText, month, date, count, points }) => {
+  // badgeText에 따른 아이콘 매핑
+  const badgeIcons = {
+    직무별: TaskIcon,
+    리더부여: LeaderAssignmentIcon,
+  };
+
+  const icon = badgeIcons[badgeText] || dart; // badgeText에 해당하는 아이콘, 기본값은 dart
+
   const styles = {
     container: {
       display: "flex",
-      width:"350px",
-      height:"120px",
+      width: "350px",
+      height: "120px",
       alignItems: "center",
-      background: "#ffffff",
+      background: isIncomplete ? "#F0F0F0" : "#ffffff", // "미완성"일 경우 회색으로 변경
       padding: "20px",
       borderRadius: "16px",
       boxShadow: "0px 2px 11px #9E1F0026",
@@ -18,7 +37,7 @@ const QuestExperience = ({ title, badgeText, maxBadgeText, month, date, count, p
     icon: {
       width: "80px",
       height: "80px",
-      background: "#FFCCC0",
+      background: isIncomplete ? "#D3D3D3" : "#FFCCC0", // 아이콘 배경색도 변경
       borderRadius: "100px",
       paddingLeft: "12px",
       marginRight: "18px",
@@ -63,7 +82,7 @@ const QuestExperience = ({ title, badgeText, maxBadgeText, month, date, count, p
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      background: "#28BF4F",
+      background: isIncomplete ? "#C4C4C4" : "#28BF4F", // "미완성"일 경우 회색으로 변경
       borderRadius: "8px",
       paddingTop: "5px",
       paddingBottom: "5px",
@@ -127,7 +146,7 @@ const QuestExperience = ({ title, badgeText, maxBadgeText, month, date, count, p
   return (
     <div style={styles.container}>
       <div style={styles.icon}>
-        <img src={dart} alt="Icon" style={styles.iconImage} />
+        <img src={icon} alt="Icon" style={styles.iconImage} /> {/* 동적 아이콘 */}
       </div>
       <div style={styles.details}>
         <div style={styles.detailRow}>
@@ -140,13 +159,14 @@ const QuestExperience = ({ title, badgeText, maxBadgeText, month, date, count, p
           <div style={styles.maxBadge}>
             <span style={styles.maxBadgeText}>{maxBadgeText}</span>
           </div>
-          <div style={styles.monthBadge}>
-            <span style={styles.monthBadgeText}>{month}</span>
-          </div>
+          {month && (
+            <div style={styles.monthBadge}>
+              <span style={styles.monthBadgeText}>{month}</span>
+            </div>
+          )}
         </div>
         <div style={styles.dateRow}>
-          <span style={styles.date}>{date}</span>
-          <img src={dart} alt="Divider" style={styles.divider} />
+          {date && <span style={styles.date}>{date}</span>}
           <span style={styles.count}>{count}</span>
         </div>
       </div>

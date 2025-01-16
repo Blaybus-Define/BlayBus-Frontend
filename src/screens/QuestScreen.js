@@ -178,21 +178,23 @@ const QuestScreen = () => {
               quest.questType === "TASK" ? TaskIcon : LeaderAssignmentIcon;
             const badgeText =
               quest.questType === "TASK" ? "직무별" : "리더부여";
+            const achievedLevel =
+              quest.achievedLevel === "NOT_ACHIEVED" ? "미완성" : quest.achievedLevel;
 
-            return (
-              <div key={index} style={styles.cardWrapper}>
-                <QuestExperience
-                  title={quest.title || "제목 없음"}
-                  badgeText={badgeText}
-                  maxBadgeText={quest.achievedLevel || "N/A"}
-                  month={quest.questFrequency || "주기 없음"}
-                  date={quest.date || "날짜 없음"}
-                  count={quest.description || "설명 없음"}
-                  points={quest.experience || 0}
-                  icon={icon}
-                />
-              </div>
-            );
+              return (
+                <div key={index} style={styles.cardWrapper}>
+                  <QuestExperience
+                    title={quest.title || "제목 없음"}
+                    badgeText={badgeText}
+                    maxBadgeText={achievedLevel}
+                    month={quest.count|| ""} 
+                    date={quest.date || ""}
+                    count={quest.description || "설명 없음"}
+                    points={quest.experience || 0}
+                    icon={icon}
+                  />
+                </div>
+              );
           })
         ) : (
           <div>퀘스트 데이터가 없습니다.</div>

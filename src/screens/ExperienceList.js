@@ -40,7 +40,7 @@ const styles = {
     alignSelf: "stretch",
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     marginBottom: 14,
     marginLeft: 20,
     marginRight: 20,
@@ -50,7 +50,32 @@ const styles = {
     width: 11,
     height: 6,
     marginTop: "0px",
+
     objectFit: "fill",
+  },
+  totalCountContainer: {
+    display: "flex",
+    alignItems: "center",
+    marginLeft: 20,
+    marginRight:10,
+    fontSize: 15,
+    fontWeight:400,
+    color: "#212124",
+  },
+  totalCountNumber: {
+    fontWeight: "bold",
+    marginRight: 5,
+    marginLeft: 5,
+    fontSize: 16,
+  },
+  experiencesContainer: {
+    display: "inline-flex",
+    padding: "20px",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: "16px",
+    background: "var(--Box-bg, rgba(255, 255, 255, 0.70))",
+    boxShadow: "0px 2px 11.8px 0px rgba(159, 32, 0, 0.15)",
   },
 };
 
@@ -97,6 +122,15 @@ const ExperienceList = ({ myLevel, myTotalExperience }) => {
     }
   };
 
+  const formatMonth = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    const monthNames = [
+      "1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월",
+    ];
+    return monthNames[date.getMonth()];
+  };
+
   useEffect(() => {
     if (selectedPeriod === "전체기간") {
       fetchData(); // "전체기간" 선택 시 API 호출
@@ -123,36 +157,44 @@ const ExperienceList = ({ myLevel, myTotalExperience }) => {
       <div style={{ width: "100%", padding: "0px 20px" }}>
         <MyExpBox levelName={myLevel} totalExperience={myTotalExperience} />
       </div>
-      <div
-        style={styles.statsContainer}
-        onClick={() => setModalVisible(true)}
-      >
-        <span style={{ textAlign: "right" }}>{selectedPeriod}</span>
-        <span>·</span>
-        <span style={{ textAlign: "right" }}>{selectedClass}</span>
-        <img src={arrowDown} style={styles.arrowImage} alt="icon" />
+      <div style={styles.statsContainer}>
+        <div style={styles.totalCountContainer}>
+          총 <span style={styles.totalCountNumber}>{data.length}</span>건
+        </div>
+        <div onClick={() => setModalVisible(true)} style={{ display: "flex", alignItems: "center", marginLeft: 20, marginRight: 10, fontSize: 15, fontWeight: 400, color: "#212124" }}>
+          <span style={{ textAlign: "right", marginLeft: 20, marginRight: 5, fontSize: 15, fontWeight: 400, color: "#212124" }}>{selectedPeriod}</span>
+          <span>·</span>
+          <span style={{ textAlign: "right", marginLeft: 5, marginRight: 5, fontSize: 15, fontWeight: 400, color: "#212124" }}>{selectedClass}</span>
+          <img src={arrowDown} style={styles.arrowImage} alt="icon" />
+        </div>
       </div>
-      <div style={{ margin: "20px" }}>
+      <div style={styles.experiencesContainer}>
         {loading && <p>로딩 중...</p>}
         {error && <p style={{ color: "red" }}>에러 발생: {error}</p>}
         {!loading && !error && data.length === 0 && <p>데이터가 없습니다.</p>}
         {!loading &&
           !error &&
           data.map((item, index) => (
-            <Experience
+            <div
               key={index}
-              title={item.title || "제목 없음"}
-              badgeText={item.type || "타입 없음"}
-              maxBadgeText={item.reason || "사유 없음"}
-              month={item.description || "설명 없음"}
-              date={item.date || "날짜 없음"}
-              count={`${item.exp || 0} EXP`}
-              points={item.exp || 0}
-              questType={item.type || "DEFAULT"}
-              experience={item.exp || 0}
-            />
+              style={{
+                marginBottom: index === data.length - 1 ? 0 : 16,
+              }}
+            >
+              <Experience
+                title={item.title || "제목 없음"}
+                badgeText={item.type || "타입 없음"}
+                maxBadgeText={item.reason || "사유 없음"}
+                month={formatMonth(item.description) || undefined}
+                date={item.date || "날짜 없음"}
+                points={item.exp || 0}
+                questType={item.type || "DEFAULT"}
+                experience={item.exp || 0}
+              />
+            </div>
           ))}
       </div>
+
       {modalVisible && (
         <Modal
           visible={modalVisible}
