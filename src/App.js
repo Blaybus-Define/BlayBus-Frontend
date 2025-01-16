@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
@@ -83,7 +84,6 @@ function App() {
 
   return (
     <>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Toaster position="top-center" reverseOrder={false} />
       <AliveScope>
         <Routes>
@@ -122,7 +122,6 @@ function App() {
           <Route path="/notice/write" element={<NoticeWriteScreen />} />
         </Routes>
       </AliveScope>
-      </BrowserRouter>
     </>
   );
 }
