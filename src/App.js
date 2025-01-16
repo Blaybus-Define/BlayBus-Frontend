@@ -18,7 +18,7 @@ import { AliveScope } from "react-activation";
 import NoticeWriteScreen from "./screens/notice/NoticeWriteScreen";
 import QuestScreen from "./screens/QuestScreen";
 import ExperienceList from "./screens/ExperienceList";
-import { BrowserRouter } from "react-router-dom";
+// import { BrowserRouter } from "react-router-dom";
 
 
 const Layout = () => (
@@ -84,7 +84,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter basename="/BlayBus-Frontend">
+      {/* <BrowserRouter basename="/BlayBus-Frontend"> */}
       <Toaster position="top-center" reverseOrder={false} />
       <AliveScope>
         <Routes>
@@ -123,7 +123,7 @@ function App() {
           <Route path="/notice/write" element={<NoticeWriteScreen />} />
         </Routes>
       </AliveScope>
-      </BrowserRouter>
+      {/* </BrowserRouter> */}
     </>
   );
 }
