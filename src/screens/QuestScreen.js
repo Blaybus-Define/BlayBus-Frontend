@@ -3,6 +3,8 @@ import "../App.css";
 import "../fonts/font.css";
 import Navbar from "../components/Navbar/Navbar";
 import toast from "react-hot-toast";
+import TaskIconGray from "../images/exp/duty_image_gray.png";
+import LeaderAssignmentIconGray from "../images/exp/leader_image_gray.png";
 
 import LeftArrow from "../images/quest/arrow_left_black.png";
 import RightArrowBlack from "../images/quest/arrow_right_black.png";
@@ -16,32 +18,29 @@ import { theme } from "../themes/theme";
 import colors from "../colors/colors";
 
 const QuestScreen = () => {
-  const [quests, setQuests] = useState([]); // 퀘스트 데이터를 저장할 상태
-  const [loading, setLoading] = useState(true); // 로딩 상태 관리
-  const [error, setError] = useState(false); // 에러 상태 관리
-  const [activeTabIndex, setActiveTabIndex] = useState(0); // 활성화된 탭 인덱스
+  const [quests, setQuests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewDate, setViewDate] = useState(new Date());
 
   const fetchMyQuests = async (year, month, week, extraValue) => {
     try {
-      const BASE_URL = process.env.REACT_APP_API_URL; // 환경 변수에서 API URL 가져오기
-      const params = { year, month }; // 기본 필수 파라미터
-      if (week) params.week = week; // 선택적 파라미터 추가
-      if (extraValue) params.extraValue = extraValue; // 추가 파라미터 처리
+      const BASE_URL = process.env.REACT_APP_API_URL;
+      const params = { year, month };
+      if (week) params.week = week;
+      if (extraValue) params.extraValue = extraValue;
 
       const response = await axios.get(`${BASE_URL}/quests/member`, {
-        params: params, // 모든 파라미터 포함
-        withCredentials: true, // 인증 포함
+        params: params,
+        withCredentials: true,
       });
 
-      console.log("요청 파라미터:", params); // 요청 파라미터 확인
-      console.log("API 응답 데이터:", response.data); // 응답 데이터 확인
-
-      return response.data; // API 응답 데이터 반환
+      return response.data;
     } catch (error) {
       console.error("퀘스트 조회 실패:", error);
-      throw error; // 에러를 호출한 곳에서 처리
+      throw error;
     }
   };
 
@@ -49,13 +48,11 @@ const QuestScreen = () => {
     const loadQuests = async () => {
       try {
         const year = viewDate.getFullYear();
-        const month = viewDate.getMonth() + 1; // JS에서 월은 0부터 시작하므로 +1
-        const week = activeTabIndex > 0 ? activeTabIndex : undefined; // 선택된 탭에 따라 주차 결정
-        const extraValue = 3; // 추가 파라미터 값
-        console.log("요청 파라미터:", { year, month, week, extraValue });
-        const data = await fetchMyQuests(year, month, week, extraValue); // API 호출
-        console.log("API 응답 데이터:", data); // 응답 데이터 확인
-        setQuests(data.quests || []); // quests 키가 없을 경우 빈 배열로 처리
+        const month = viewDate.getMonth() + 1;
+        const week = activeTabIndex > 0 ? activeTabIndex : undefined;
+        const extraValue = 3;
+        const data = await fetchMyQuests(year, month, week, extraValue);
+        setQuests(data.quests || []);
       } catch (err) {
         console.error("데이터 로드 실패:", err);
         setError(true);
@@ -145,7 +142,7 @@ const QuestScreen = () => {
                   activeTabIndex === index ? "#FF5C35" : "#FFFFFF",
                 borderColor: activeTabIndex === index ? "#FF5C35" : "#ADB1BA",
               }}
-              onClick={() => setActiveTabIndex(index)} // 클릭 이벤트로 활성 탭 설정
+              onClick={() => setActiveTabIndex(index)}
             >
               <span
                 className="Body-2-b"
@@ -175,7 +172,14 @@ const QuestScreen = () => {
         {quests && quests.length > 0 ? (
           quests.map((quest, index) => {
             const icon =
-              quest.questType === "TASK" ? TaskIcon : LeaderAssignmentIcon;
+              quest.questType === "TASK"
+                ? isAchieved
+                  ? TaskIcon
+                  : TaskIconGray
+                : isAchieved
+                ? LeaderAssignmentIcon
+                : LeaderAssignmentIconGray;
+
             const badgeText =
               quest.questType === "TASK" ? "직무별" : "리더부여";
             const achievedLevel =
@@ -282,7 +286,7 @@ const styles = {
     gap: "12px",
   },
   cardWrapper: {
-    marginBottom: "12px", // 컴포넌트 사이 여백 설정
+    marginBottom: "12px",
   },
 };
 
