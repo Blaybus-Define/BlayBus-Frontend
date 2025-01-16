@@ -8,17 +8,16 @@ import "./fonts/font.css";
 
 // Service Worker 등록
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register(`${process.env.PUBLIC_URL}/firebase-messaging-sw.js`)
-      .then((registration) => {
-        console.log("Service Worker 등록 완료:", registration);
-      })
-      .catch((error) => {
-        console.error("Service Worker 등록 실패:", error);
-      });
-  });
+  navigator.serviceWorker
+    .register(`${process.env.PUBLIC_URL}/firebase-messaging-sw.js`)
+    .then((registration) => {
+      console.log("Service Worker 등록 성공:", registration);
+    })
+    .catch((error) => {
+      console.error("Service Worker 등록 실패:", error);
+    });
 }
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
