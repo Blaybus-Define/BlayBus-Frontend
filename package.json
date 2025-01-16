@@ -8,7 +8,6 @@
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "axios": "^1.7.9",
-    "firebase": "^11.1.0",
     "gh-pages": "^6.3.0",
     "react": "^18.3.1",
     "react-activation": "^0.13.0",

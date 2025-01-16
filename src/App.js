@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar/Navbar";
 import LoginScreen from "./screens/LoginScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import MyExpScreen from "./screens/MyExpScreen";
-import { getFirebaseToken } from "./FCM";
+// import { getFirebaseToken } from "./FCM";
 import { Toaster } from "react-hot-toast";
 import { setupInterceptors, customAxios } from "./customAxios";
 import PasswordChangeScreen from "./screens/PasswordChangeScreen";
@@ -33,31 +33,31 @@ function App() {
   const [myLevel, setMyLevel] = useState("");
   const [myTotalExperience, setMytotalExperience] = useState("");
 
-  // FCM
-  useEffect(() => {
-    const requestPermission = async () => {
-      if (!("Notification" in window)) {
-        console.warn("이 브라우저는 알림을 지원하지 않습니다.");
-        return;
-      }
+  // // FCM
+  // useEffect(() => {
+  //   const requestPermission = async () => {
+  //     if (!("Notification" in window)) {
+  //       console.warn("이 브라우저는 알림을 지원하지 않습니다.");
+  //       return;
+  //     }
 
-      if (Notification.permission !== "granted") {
-        const permission = await Notification.requestPermission();
-        if (permission === "granted") {
-          await getFirebaseToken();
-        } else {
-          console.warn("알림 권한이 거부되었습니다.");
-          alert(
-            "알림 권한을 허용하지 않으셨습니다. 알림 권한은 브라우저 설정에서 변경할 수 있습니다."
-          );
-        }
-      } else {
-        await getFirebaseToken();
-      }
-    };
+  //     if (Notification.permission !== "granted") {
+  //       const permission = await Notification.requestPermission();
+  //       if (permission === "granted") {
+  //         await getFirebaseToken();
+  //       } else {
+  //         console.warn("알림 권한이 거부되었습니다.");
+  //         alert(
+  //           "알림 권한을 허용하지 않으셨습니다. 알림 권한은 브라우저 설정에서 변경할 수 있습니다."
+  //         );
+  //       }
+  //     } else {
+  //       await getFirebaseToken();
+  //     }
+  //   };
 
-    requestPermission();
-  }, []);
+  //   requestPermission();
+  // }, []);
 
   // Interceptor 초기화
   useEffect(() => {
