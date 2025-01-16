@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/BlayBus-Frontend/static/css/main.f14f51a5.css",
-    "main.js": "/BlayBus-Frontend/static/js/main.cb3cf18c.js",
+    "main.js": "/BlayBus-Frontend/static/js/main.e6b6f7f0.js",
     "static/js/453.bf3baf7b.chunk.js": "/BlayBus-Frontend/static/js/453.bf3baf7b.chunk.js",
     "static/media/gif1.gif": "/BlayBus-Frontend/static/media/gif1.05e48350896af53d7d39.gif",
     "static/media/Pretendard-Bold.woff": "/BlayBus-Frontend/static/media/Pretendard-Bold.1f1dbbbf311ffffcc770.woff",
@@ -47,11 +47,11 @@
     "index.html": "/BlayBus-Frontend/index.html",
     "static/media/my_activate.svg": "/BlayBus-Frontend/static/media/my_activate.cf71c10494e9641e5e71c19926bfabb6.svg",
     "main.f14f51a5.css.map": "/BlayBus-Frontend/static/css/main.f14f51a5.css.map",
-    "main.cb3cf18c.js.map": "/BlayBus-Frontend/static/js/main.cb3cf18c.js.map",
+    "main.e6b6f7f0.js.map": "/BlayBus-Frontend/static/js/main.e6b6f7f0.js.map",
     "453.bf3baf7b.chunk.js.map": "/BlayBus-Frontend/static/js/453.bf3baf7b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f14f51a5.css",
-    "static/js/main.cb3cf18c.js"
+    "static/js/main.e6b6f7f0.js"
   ]
 }
