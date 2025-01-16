@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
+// import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import LoginScreen from "./screens/LoginScreen";
 import ProfileScreen from "./screens/ProfileScreen";
