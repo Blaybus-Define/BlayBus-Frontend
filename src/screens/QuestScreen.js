@@ -102,7 +102,6 @@ const QuestScreen = () => {
         padding: "162px 0px 40px 0px",
       }}
     >
-      {/* Header Section */}
       <div
         style={{
           ...theme.pageTheme.header,
@@ -131,7 +130,6 @@ const QuestScreen = () => {
             />
           </button>
         </div>
-        {/* Tabs Section */}
         <div style={styles.tabsContainer}>
           {tabs.map((tab, index) => (
             <button
@@ -167,10 +165,11 @@ const QuestScreen = () => {
         </div>
       </div>
 
-      {/* Cards Section */}
       <div style={styles.cardsContainer}>
         {quests && quests.length > 0 ? (
           quests.map((quest, index) => {
+            const isAchieved = quest.achievedLevel !== "NOT_ACHIEVED";
+
             const icon =
               quest.questType === "TASK"
                 ? isAchieved
@@ -185,20 +184,20 @@ const QuestScreen = () => {
             const achievedLevel =
               quest.achievedLevel === "NOT_ACHIEVED" ? "미완성" : quest.achievedLevel;
 
-              return (
-                <div key={index} style={styles.cardWrapper}>
-                  <QuestExperience
-                    title={quest.title || "제목 없음"}
-                    badgeText={badgeText}
-                    maxBadgeText={achievedLevel}
-                    month={quest.count|| ""} 
-                    date={quest.date || ""}
-                    count={quest.description || "설명 없음"}
-                    points={quest.experience || 0}
-                    icon={icon}
-                  />
-                </div>
-              );
+            return (
+              <div key={index} style={styles.cardWrapper}>
+                <QuestExperience
+                  title={quest.title || "제목 없음"}
+                  badgeText={badgeText}
+                  maxBadgeText={achievedLevel}
+                  month={quest.count || ""}
+                  date={quest.date || ""}
+                  count={quest.description || "설명 없음"}
+                  points={quest.experience || 0}
+                  icon={icon}
+                />
+              </div>
+            );
           })
         ) : (
           <div>퀘스트 데이터가 없습니다.</div>
@@ -223,16 +222,6 @@ const styles = {
     flexDirection: "column",
     backgroundColor: "#FFF2EF",
     minHeight: "100vh",
-  },
-  headerAll: {
-    display: "flex",
-    width: "390px",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "column",
-    padding: "20px",
-    background: "var(--Box-bg, rgba(255, 255, 255, 0.70))",
-    boxShadow: "0px 2px 11.8px 0px rgba(159, 32, 0, 0, 0.15)",
   },
   headerSection: {
     display: "flex",
