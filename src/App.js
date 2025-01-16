@@ -83,7 +83,7 @@ function App() {
 
   return (
     <>
-    
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Toaster position="top-center" reverseOrder={false} />
       <AliveScope>
         <Routes>
@@ -122,6 +122,7 @@ function App() {
           <Route path="/notice/write" element={<NoticeWriteScreen />} />
         </Routes>
       </AliveScope>
+      </BrowserRouter>
     </>
   );
 }
