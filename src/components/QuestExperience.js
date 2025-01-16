@@ -1,7 +1,9 @@
 import React from "react";
 import dart from "../images/exp/exp_dart.png"; // 기본 아이콘
 import TaskIcon from "../images/exp/duty_image.png"; // 직무 아이콘
+import TaskIconGray from "../images/exp/duty_image_gray.png"; // 직무 회색 아이콘
 import LeaderAssignmentIcon from "../images/exp/leader_image.png"; // 리더 부여 아이콘
+import LeaderAssignmentIconGray from "../images/exp/leader_image_gray.png"; // 리더 부여 회색 아이콘
 import colors from "../colors/colors";
 
 const QuestExperience = ({
@@ -17,11 +19,30 @@ const QuestExperience = ({
 
   // badgeText에 따른 아이콘 매핑
   const badgeIcons = {
-    직무별: TaskIcon,
-    리더부여: LeaderAssignmentIcon,
+    직무별: isIncomplete ? TaskIconGray : TaskIcon, // "미완성"이면 회색 아이콘 사용
+    리더부여: isIncomplete ? LeaderAssignmentIconGray : LeaderAssignmentIcon, // "미완성"이면 회색 아이콘 사용
   };
 
   const icon = badgeIcons[badgeText] || dart; // badgeText에 해당하는 아이콘, 기본값은 dart
+
+  // PNG 크기 스타일 매핑
+  const pngStyles = {
+    직무별: {
+      width: "50px",
+      height: "45px",
+    },
+    리더부여: {
+      width: "65px",
+      height: "65px",
+    },
+    기본: {
+      width: "50px",
+      height: "60px",
+    },
+  };
+
+  // 현재 PNG 아이콘 스타일
+  const currentPngStyle = pngStyles[badgeText] || pngStyles.기본;
 
   const styles = {
     container: {
@@ -34,18 +55,19 @@ const QuestExperience = ({
       borderRadius: "16px",
       boxShadow: "0px 2px 11px #9E1F0026",
     },
-    icon: {
+    iconWrapper: {
       width: "80px",
       height: "80px",
-      background: isIncomplete ? "#D3D3D3" : "#FFCCC0", // 아이콘 배경색도 변경
+      background: isIncomplete ? "#D3D3D3" : "#FFCCC0", // 동그라미 배경
       borderRadius: "100px",
-      paddingLeft: "12px",
       marginRight: "18px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
-    iconImage: {
-      height: "66px",
-      marginTop: "4px",
-      objectFit: "fill",
+    pngIcon: {
+      ...currentPngStyle, // PNG 아이콘 크기 적용
+      objectFit: "contain",
     },
     details: {
       flex: 1,
@@ -116,12 +138,6 @@ const QuestExperience = ({
       fontSize: "12px",
       marginRight: "11px",
     },
-    divider: {
-      width: "1px",
-      height: "7px",
-      marginRight: "7px",
-      objectFit: "fill",
-    },
     count: {
       color: colors.gray[900],
       fontSize: "12px",
@@ -145,8 +161,8 @@ const QuestExperience = ({
 
   return (
     <div style={styles.container}>
-      <div style={styles.icon}>
-        <img src={icon} alt="Icon" style={styles.iconImage} /> {/* 동적 아이콘 */}
+      <div style={styles.iconWrapper}>
+        <img src={icon} alt="Icon" style={styles.pngIcon} /> {/* PNG 스타일 적용 */}
       </div>
       <div style={styles.details}>
         <div style={styles.detailRow}>
