@@ -4,7 +4,7 @@ import Close from "../../icons/close.svg";
 import colors from "../../colors/colors";
 import PressableButton from "../PressableButton";
 
-const Modal = ({ visible, onClose }) => {
+const Modal = ({ visible, onClose, onApply }) => {
   const [selectedPeriod, setSelectedPeriod] = useState("전체");
   const [selectedClass, setSelectedClass] = useState("전체");
   const [startDate, setStartDate] = useState("");
@@ -44,6 +44,11 @@ const Modal = ({ visible, onClose }) => {
       document.body.style.overflow = "auto";
     };
   }, [visible]);
+
+  const handleApply = () => {
+    onApply(selectedPeriod, selectedClass); // 선택된 값 전달
+    onClose(); // 모달 닫기
+  };
 
   return (
     <div className={`modal-overlay ${visible ? "show" : ""}`} onClick={onClose}>
@@ -191,9 +196,7 @@ const Modal = ({ visible, onClose }) => {
               <span className="title-3-bold">취소</span>
             </PressableButton>
             <PressableButton
-              onClick={() => {
-                // selectedPeriod, selectedClass 기반 확인 로직
-              }}
+              onClick={handleApply}
               pressedStyle={{ backgroundColor: colors.orange[600] }}
               style={{
                 ...styles.yesNoButton,
