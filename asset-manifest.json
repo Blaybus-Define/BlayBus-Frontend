@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/BlayBus-Frontend/static/css/main.f14f51a5.css",
-    "main.js": "/BlayBus-Frontend/static/js/main.e6b6f7f0.js",
+    "main.js": "/BlayBus-Frontend/static/js/main.af280648.js",
     "static/js/453.bf3baf7b.chunk.js": "/BlayBus-Frontend/static/js/453.bf3baf7b.chunk.js",
     "static/media/gif1.gif": "/BlayBus-Frontend/static/media/gif1.05e48350896af53d7d39.gif",
     "static/media/Pretendard-Bold.woff": "/BlayBus-Frontend/static/media/Pretendard-Bold.1f1dbbbf311ffffcc770.woff",
@@ -23,8 +23,8 @@
     "static/media/project_image.png": "/BlayBus-Frontend/static/media/project_image.580ed111c6129e1621b8.png",
     "static/media/duty_image.png": "/BlayBus-Frontend/static/media/duty_image.1651caf68849f0739ef8.png",
     "static/media/profile_star.png": "/BlayBus-Frontend/static/media/profile_star.b106eefc6bf1607ef9ca.png",
-    "static/media/duty_image_gray.png": "/BlayBus-Frontend/static/media/duty_image_gray.2847d944e29307b62a5f.png",
-    "static/media/leader_image_gray.png": "/BlayBus-Frontend/static/media/leader_image_gray.92dcba0521e893116a8a.png",
+    "static/media/leader_image_gray.png": "/BlayBus-Frontend/static/media/leader_image_gray.2847d944e29307b62a5f.png",
+    "static/media/duty_image_gray.png": "/BlayBus-Frontend/static/media/duty_image_gray.92dcba0521e893116a8a.png",
     "static/media/arrow_back.png": "/BlayBus-Frontend/static/media/arrow_back.33ce438757f22a3afa66.png",
     "static/media/profile_flower_btn.png": "/BlayBus-Frontend/static/media/profile_flower_btn.8e9eab6f624af6b816bf.png",
     "static/media/profile_heart_btn.png": "/BlayBus-Frontend/static/media/profile_heart_btn.1d4a9705a08cab8b4933.png",
@@ -47,11 +47,11 @@
     "index.html": "/BlayBus-Frontend/index.html",
     "static/media/my_activate.svg": "/BlayBus-Frontend/static/media/my_activate.cf71c10494e9641e5e71c19926bfabb6.svg",
     "main.f14f51a5.css.map": "/BlayBus-Frontend/static/css/main.f14f51a5.css.map",
-    "main.e6b6f7f0.js.map": "/BlayBus-Frontend/static/js/main.e6b6f7f0.js.map",
+    "main.af280648.js.map": "/BlayBus-Frontend/static/js/main.af280648.js.map",
     "453.bf3baf7b.chunk.js.map": "/BlayBus-Frontend/static/js/453.bf3baf7b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f14f51a5.css",
-    "static/js/main.e6b6f7f0.js"
+    "static/js/main.af280648.js"
   ]
 }
