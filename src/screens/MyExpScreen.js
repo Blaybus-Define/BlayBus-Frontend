@@ -229,7 +229,7 @@ const MyExpScreen = ({ myLevel }) => {
       style={{
         ...theme.pageTheme.container,
         backgroundColor: colors.Primary.bg,
-        padding: "45px 20px 40px 20px",
+        padding: "85px 20px 40px 20px",
       }}
     >
       {/* header */}

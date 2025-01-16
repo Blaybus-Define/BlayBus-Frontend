@@ -6,7 +6,7 @@ import arrowBack from "../images/arrow_back.png";
 import arrowDown from "../images/down_arrow.png";
 import { MyExpBox } from "../components/MyExpBox";
 import PressableButton from "../components/PressableButton";
-import Modal from "../components/Modal/Modal"; 
+import Modal from "../components/Modal/Modal";
 import { useNavigate } from "react-router-dom";
 
 const styles = {
@@ -91,14 +91,14 @@ const styles = {
 
 const ExperienceList = ({ myLevel, myTotalExperience }) => {
   const navigate = useNavigate();
-  const [modalVisible, setModalVisible] = useState(false); 
-  const [selectedPeriod, setSelectedPeriod] = useState("전체기간"); 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState("전체기간");
   const [selectedClass, setSelectedClass] = useState("전체");
 
   const handleApplyFilters = (period, cls) => {
-    setSelectedPeriod(period); 
-    setSelectedClass(cls); 
-    setModalVisible(false); 
+    setSelectedPeriod(period);
+    setSelectedClass(cls);
+    setModalVisible(false);
   };
 
   return (
@@ -115,10 +115,7 @@ const ExperienceList = ({ myLevel, myTotalExperience }) => {
       <div style={{ width: "100%", padding: "0px 20px" }}>
         <MyExpBox levelName={myLevel} totalExperience={myTotalExperience} />
       </div>
-      <div
-        style={styles.statsContainer}
-        onClick={() => setModalVisible(true)} 
-      >
+      <div style={styles.statsContainer} onClick={() => setModalVisible(true)}>
         <span style={styles.statsText}>{selectedPeriod}</span>
         <span style={styles.statsDivider}>·</span>
         <span style={styles.statsText}>{selectedClass}</span>
@@ -129,7 +126,7 @@ const ExperienceList = ({ myLevel, myTotalExperience }) => {
         <Modal
           visible={modalVisible}
           onClose={() => setModalVisible(false)} // 모달 닫기
-          onApply={handleApplyFilters} 
+          onApply={handleApplyFilters}
         />
       )}
     </div>
