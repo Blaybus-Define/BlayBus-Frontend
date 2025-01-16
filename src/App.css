@@ -31,11 +31,7 @@ body,
 html {
   background-color: #fff;
   overflow-x: hidden;
-  font-family: "Mooli", sans-serif;
-}
-
-:root {
-  --page-width: 390px;
+  font-family: "Pretendard", sans-serif;
 }
 
 .page {
@@ -53,11 +49,6 @@ html {
   -ms-scroll-limit: 0 0 0 0;
   -ms-overflow-style: none;
   overscroll-behavior: none;
-}
-
-.wrap {
-  padding-bottom: 6vh;
-  /* padding-top: 6vh; */
 }
 
 @media (min-width: 390px) {

@@ -14,13 +14,14 @@ import NoticeDetailScreen from "./screens/notice/NoticeDetailScreen";
 import NoticeScreen from "./screens/notice/NoticeScreen";
 import ProfileSettingScreen from "./screens/ProfileSettingScreen";
 import NotificationScreen from "./screens/NotificationScreen";
+import { AliveScope } from "react-activation";
+import NoticeWriteScreen from "./screens/notice/NoticeWriteScreen";
 import QuestScreen from "./screens/QuestScreen";
+import ExperienceList from "./screens/ExperienceList";
 
 const Layout = () => (
   <div className="page">
-    <div className="wrap">
-      <Outlet />
-    </div>
+    <Outlet />
     <Navbar />
   </div>
 );
@@ -28,6 +29,8 @@ const Layout = () => (
 function App() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
+  const [myLevel, setMyLevel] = useState("");
+  const [myTotalExperience, setMytotalExperience] = useState("");
 
   // FCM
   useEffect(() => {
@@ -80,23 +83,43 @@ function App() {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/myexp" element={<MyExpScreen />} />
-          <Route path="/notice" element={<NoticeScreen />} />
-          <Route path="/notice/detail" element={<NoticeDetailScreen />} />
-          <Route path="/profile" element={<ProfileScreen />} />
-          <Route path="/passwordchange" element={<PasswordChangeScreen />} />
-          <Route path="/quest" element={<QuestScreen />} />
-        </Route>
-        <Route
-          path="/login"
-          element={<LoginScreen setIsLogin={setIsLogin} />}
-        />
-        <Route path="/profile/setting" element={<ProfileSettingScreen />} />
-        <Route path="/notification" element={<NotificationScreen />} />
-      </Routes>
+      <AliveScope>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route
+              path="/"
+              element={
+                <Home
+                  setMyLevel={setMyLevel}
+                  setMytotalExperience={setMytotalExperience}
+                />
+              }
+            />
+            <Route path="/myexp" element={<MyExpScreen myLevel={myLevel} />} />
+            <Route path="/notice" element={<NoticeScreen />} />
+            <Route path="/notice/detail" element={<NoticeDetailScreen />} />
+            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/passwordchange" element={<PasswordChangeScreen />} />
+            <Route path="/quest" element={<QuestScreen />} />
+            <Route
+              path="/experiences"
+              element={
+                <ExperienceList
+                  myLevel={myLevel}
+                  myTotalExperience={myTotalExperience}
+                />
+              }
+            />
+          </Route>
+          <Route
+            path="/login"
+            element={<LoginScreen setIsLogin={setIsLogin} />}
+          />
+          <Route path="/profile/setting" element={<ProfileSettingScreen />} />
+          <Route path="/notification" element={<NotificationScreen />} />
+          <Route path="/notice/write" element={<NoticeWriteScreen />} />
+        </Routes>
+      </AliveScope>
     </>
   );
 }

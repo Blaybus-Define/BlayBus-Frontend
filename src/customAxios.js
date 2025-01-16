@@ -3,6 +3,9 @@ import axios from "axios";
 const customAxios = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 let isInterceptorSetup = false;

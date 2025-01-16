@@ -1,10 +1,10 @@
 import colors from "../colors/colors";
 import PressableButton from "./PressableButton";
 
-export const BottomButton = ({ disabledCondition, text }) => {
+export const BottomButton = ({ disabledCondition, text, onClick }) => {
   return (
     <PressableButton
-      onClick={() => {}}
+      onClick={onClick}
       pressedStyle={{ backgroundColor: colors.orange[600] }}
       style={{
         ...styles.container,

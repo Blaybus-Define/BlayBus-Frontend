@@ -7,8 +7,8 @@ import colors from "../colors/colors";
 import "../fonts/font.css";
 import { customAxios } from "../customAxios";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import PressableButton from "../components/PressableButton";
+import toast from "react-hot-toast";
 
 const PasswordChangeScreen = () => {
   const navigate = useNavigate();
@@ -19,6 +19,11 @@ const PasswordChangeScreen = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [showError, setShowError] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const savedPassword = localStorage.getItem("loginPassword");
 
   const isButtonDisabled =
     !currentPassword || !newPassword || newPassword !== confirmPassword;
@@ -46,18 +51,34 @@ const PasswordChangeScreen = () => {
   };
 
   const handleChangePassword = async () => {
+    if (currentPassword !== savedPassword) {
+      // 현재 비밀번호가 로그인 시 비밀번호와 일치하지 않을 때
+      setShowError(true);
+      setFadeOut(false);
+
+      setTimeout(() => {
+        setFadeOut(true);
+      }, 3000);
+
+      setTimeout(() => {
+        setShowError(false);
+      }, 3500);
+
+      return;
+    }
+
     try {
       const response = await customAxios.put("/members/update-pw", {
         oldPassword: currentPassword,
         newPassword: newPassword,
       });
       console.log("비밀번호변경: ", response);
-      navigate(-1);
       toast.success("비밀번호 변경 완료!", {
         duration: 1000,
       });
+      navigate(-1);
     } catch (error) {
-      console.warn("비밀번호변경", error);
+      console.warn("비밀번호변경 오류: ", error);
     }
   };
 
@@ -141,7 +162,7 @@ const PasswordChangeScreen = () => {
       >
         <span
           style={{
-            color: isButtonDisabled ? colors.gray[500] : "#FFFFFF", // 텍스트 색상 동적 설정
+            color: isButtonDisabled ? colors.gray[500] : "#FFFFFF",
             fontSize: 18,
             fontWeight: "bold",
           }}
@@ -149,6 +170,20 @@ const PasswordChangeScreen = () => {
           {"비밀번호 변경"}
         </span>
       </button>
+      {showError && (
+        <div
+          style={{
+            ...styles.errorBox,
+            opacity: fadeOut ? 0 : 1,
+            visibility: fadeOut ? "hidden" : "visible",
+            transition: "opacity 0.5s ease-out, visibility 0.5s ease-out",
+          }}
+        >
+          <span style={styles.errorText}>
+            현재 비밀번호를 다시 확인해주세요.
+          </span>
+        </div>
+      )}
     </div>
   );
 };
@@ -157,6 +192,10 @@ const styles = {
   container: {
     display: "flex",
     alignItems: "flex-start",
+    flexDirection: "column",
+    height: "100vh",
+    width: "100%",
+    paddingTop: 20,
   },
   headerContainer: {
     alignSelf: "stretch",
@@ -210,7 +249,7 @@ const styles = {
     border: "none",
     paddingTop: 18,
     paddingBottom: 18,
-    marginBottom: 50,
+    marginBottom: 16, // 버튼과 에러 박스 간의 여백
     marginLeft: 20,
     marginRight: 20,
     textAlign: "left",
@@ -225,10 +264,27 @@ const styles = {
     border: "none",
     paddingTop: 18,
     paddingBottom: 18,
-    marginBottom: 50,
+    marginBottom: 16, // 버튼과 에러 박스 간의 여백
     marginLeft: 20,
     marginRight: 20,
     textAlign: "left",
+  },
+  errorBox: {
+    alignSelf: "center", // 에러 박스가 중앙에 나타나도록 설정
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    background: "#ED49561A",
+    borderRadius: 8,
+    border: "none",
+    width: 350,
+    padding: "8px 16px",
+    textAlign: "center",
+  },
+  errorText: {
+    color: "#ED4956",
+    fontSize: 14,
   },
 };
 

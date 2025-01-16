@@ -1,21 +1,16 @@
 import React from "react";
 import dart from "../images/exp/exp_dart.png";
-import TaskIcon from "../images/exp/duty_image.png";
-import LeaderAssignmentIcon from "../images/exp/leader_image.png";
 import colors from "../colors/colors";
 
-const RecentExperience = ({ title, badgeText, maxBadgeText, month, date, count, points, questType, experience }) => {
-  const isAchieved = experience > 0; // 경험치에 따라 달성 여부 결정
-  const icon = questType === "TASK" ? TaskIcon : LeaderAssignmentIcon; // 퀘스트 타입에 따라 아이콘 변경
-  const badgeContent = questType === "TASK" ? "직무별" : "리더부여"; // 퀘스트 타입에 따라 배지 텍스트 변경
 
+const QuestExperience = ({ title, badgeText, maxBadgeText, month, date, count, points }) => {
   const styles = {
     container: {
       display: "flex",
-      width: "350px",
-      height: "120px",
+      width:"350px",
+      height:"120px",
       alignItems: "center",
-      background: "#FFFFFF" ,
+      background: "#ffffff",
       padding: "20px",
       borderRadius: "16px",
       boxShadow: "0px 2px 11px #9E1F0026",
@@ -132,13 +127,13 @@ const RecentExperience = ({ title, badgeText, maxBadgeText, month, date, count, 
   return (
     <div style={styles.container}>
       <div style={styles.icon}>
-        <img src={icon} alt="Icon" style={styles.iconImage} />
+        <img src={dart} alt="Icon" style={styles.iconImage} />
       </div>
       <div style={styles.details}>
         <div style={styles.detailRow}>
           <span style={styles.detailTitle}>{title}</span>
           <div style={styles.badge}>
-            <span style={styles.badgeText}>{badgeContent}</span>
+            <span style={styles.badgeText}>{badgeText}</span>
           </div>
         </div>
         <div style={styles.detailRow}>
@@ -161,4 +156,4 @@ const RecentExperience = ({ title, badgeText, maxBadgeText, month, date, count, 
   );
 };
 
-export default RecentExperience;
+export default QuestExperience;

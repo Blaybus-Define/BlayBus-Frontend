@@ -1,13 +1,35 @@
 import React from "react";
 import dart from "../images/exp/exp_dart.png";
 import TaskIcon from "../images/exp/duty_image.png";
-import LeaderAssignmentIcon from "../images/exp/leader_image.png";
+import LeaderIcon from "../images/exp/leader_image.png";
+import EvaluationIcon from "../images/exp/evaluation_image.png";
+import ProjectIcon from "../images/exp/project_image.png";
 import colors from "../colors/colors";
 
-const RecentExperience = ({ title, badgeText, maxBadgeText, month, date, count, points, questType, experience }) => {
+const Experience = ({
+  title,
+  badgeText,
+  maxBadgeText,
+  month,
+  date,
+  count,
+  points,
+  questType,
+  experience,
+}) => {
   const isAchieved = experience > 0; // 경험치에 따라 달성 여부 결정
-  const icon = questType === "TASK" ? TaskIcon : LeaderAssignmentIcon; // 퀘스트 타입에 따라 아이콘 변경
-  const badgeContent = questType === "TASK" ? "직무별" : "리더부여"; // 퀘스트 타입에 따라 배지 텍스트 변경
+
+  // Badge to Icon Mapping
+  const badgeIcons = {
+    TASK: TaskIcon,
+    LEADER: LeaderIcon,
+    EVALUATION: EvaluationIcon,
+    PROJECT: ProjectIcon,
+  };
+
+  const icon = badgeIcons[questType] || dart; // Default icon fallback
+  const badgeContent =
+    questType === "TASK" ? "직무별" : questType === "LEADER" ? "리더부여" : "평가";
 
   const styles = {
     container: {
@@ -15,7 +37,7 @@ const RecentExperience = ({ title, badgeText, maxBadgeText, month, date, count, 
       width: "350px",
       height: "120px",
       alignItems: "center",
-      background: "#FFFFFF" ,
+      background: "#FFFFFF",
       padding: "20px",
       borderRadius: "16px",
       boxShadow: "0px 2px 11px #9E1F0026",
@@ -161,4 +183,4 @@ const RecentExperience = ({ title, badgeText, maxBadgeText, month, date, count, 
   );
 };
 
-export default RecentExperience;
+export default Experience;

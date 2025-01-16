@@ -34,25 +34,3 @@ export async function getFirebaseToken() {
     console.error("Error getting token: ", error);
   }
 }
-
-// 서버로 FCM 토큰 전송
-// export const setting = (token) => {
-//   const customAxios = axios.create({
-//     baseURL: process.env.REACT_APP_API_URL,
-//     withCredentials: true,
-//     timeout: 1000,
-//   });
-
-//   const body = { token };
-
-//   customAxios
-//     .post("/fcm", body)
-//     .then((res) => {
-//       toast.success("푸시 알림이 활성화되었습니다!", {
-//         duration: 1000,
-//       });
-//     })
-//     .catch((error) => {
-//       console.error("서버로 FCM 토큰 전송 실패:", error);
-//     });
-// };

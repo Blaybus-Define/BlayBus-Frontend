@@ -61,6 +61,15 @@ const level_table = {
 // 총 획득 경험치
 // return 다음 레벨, 다음 레벨 경험치, 남은 경험치, %
 export const getTotalExpInfo = (level, totalExp) => {
+  if (!level) {
+    return {
+      nextLevel: "None",
+      nextLevelExp: 0,
+      remainExp: 0,
+      percent: 0,
+    };
+  }
+
   const { levels, experience } = level_table[level.slice(0, 1)];
   const currentIndex = levels.indexOf(level);
 
@@ -85,7 +94,7 @@ export const getTotalExpInfo = (level, totalExp) => {
   const nextLevel = levels[currentIndex + 1];
   const nextLevelExp = experience[nextLevel];
   const remainExp = Math.max(nextLevelExp - totalExp, 0); // 음수 방지
-  const percent = ((totalExp / nextLevelExp) * 100).toFixed(2);
+  const percent = Math.round((totalExp / nextLevelExp) * 100);
   return {
     nextLevel,
     nextLevelExp,

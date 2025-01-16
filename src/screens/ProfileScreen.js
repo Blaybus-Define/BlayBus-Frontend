@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "../fonts/font.css";
 import colors from "../colors/colors";
 import Setting from "../images/profile/settings.svg";
-import LevelChip from "../components/LevelChip";
 import Arrow from "../icons/keyboard_arrow_right.svg";
 import PressableButton from "../components/PressableButton";
 import { theme } from "../themes/theme";
 import { customAxios } from "../customAxios";
-import { getTotalExpInfo } from "../CalcEx";
+import Notification from "../icons/notifications.svg";
+import { MyExpBox } from "../components/MyExpBox";
 
 const ProfileScreen = () => {
   const navigate = useNavigate();
@@ -30,12 +30,13 @@ const ProfileScreen = () => {
   const [loginId, setLoginId] = useState("");
   const [totalExperience, setTotalExperience] = useState(0);
   const [levelName, setLevelName] = useState("");
+  const [profileCharacter, setProfileCharacter] = useState("");
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadUserInfo = async () => {
       try {
-        if (employeeNumber) return;
-
         const { data } = await customAxios.get("/members/info");
         console.log("GET memberinfo: ", data);
 
@@ -46,13 +47,24 @@ const ProfileScreen = () => {
         setJobGroup(data.jobGroup);
         setLoginId(data.loginId);
         setTotalExperience(data.totalExperience);
-        // setLevelName(data.levelName);
-        setLevelName("F2-I");
+        setLevelName(data.levelName);
+
+        if (data.profileCharacter) {
+          setProfileCharacter(data.profileCharacter.toLowerCase());
+        } else {
+          setProfileCharacter("default");
+        }
       } catch (error) {
         console.error("GET error: ", error);
       }
     };
-    //loadUserInfo();
+    if (isMounted) {
+      loadUserInfo();
+    }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const formatHireDate = (dateString) => {
@@ -80,22 +92,57 @@ const ProfileScreen = () => {
     );
   };
 
-  // 경험치 계산
-  const { nextLevel, nextLevelExp, remainExp, percent } = getTotalExpInfo(
-    "F2-I",
-    totalExperience
-  );
+  const handleLogout = async () => {
+    try {
+      const response = await customAxios.post("/auth/logout");
+      navigate("/login");
+    } catch (error) {
+      console.log("로그아웃 error: ", error);
+    }
+  };
 
   return (
-    <div className="page" style={{ ...theme.pinkPage.container }}>
-      <div style={theme.pinkPage.head}>
+    <div
+      className="page"
+      style={{
+        ...theme.noticeTheme.container,
+        backgroundColor: colors.Primary.bg,
+        paddingLeft: 20,
+        paddingRight: 20,
+      }}
+    >
+      {/* header */}
+      <div
+        style={{
+          ...theme.noticeTheme.header,
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ width: 24 }} />
         <span className="title-3-bold">프로필</span>
+        <PressableButton
+          onClick={() => navigate("/notification")}
+          pressedStyle={{ opacity: 0.5 }}
+        >
+          <img
+            src={Notification}
+            alt="back"
+            style={{ width: 24, height: 24 }}
+          />
+        </PressableButton>
       </div>
+      {/* profile_photo */}
       <div style={styles.circle}>
-        <img src={profiles.default} alt="이미지" style={styles.image} />
+        <img
+          src={profiles[profileCharacter]}
+          alt="이미지"
+          style={styles.image}
+        />
         <PressableButton
           onClick={() => {
-            navigate("/profile/setting");
+            navigate("/profile/setting", {
+              state: { profileCharacter },
+            });
           }}
           style={styles.miniCircle}
           pressedStyle={{ backgroundColor: colors.gray[100] }}
@@ -103,61 +150,8 @@ const ProfileScreen = () => {
           <img src={Setting} alt="이미지" style={{ width: 24, height: 24 }} />
         </PressableButton>
       </div>
-
-      <div style={theme.boxTheme.boxContainer}>
-        <div
-          style={{
-            ...theme.boxTheme.rowContainer,
-            marginBottom: 12,
-          }}
-        >
-          <div style={styles.subContainer}>
-            <LevelChip
-              text={
-                levelName.length > 3
-                  ? `${levelName.slice(0, 2)} - ${levelName.slice(3)}`
-                  : levelName
-              }
-              color={colors.Level.Bronze}
-            />
-            <span className="Body-2-b" style={{ marginLeft: 8 }}>
-              총 누적 경험치
-            </span>
-          </div>
-          <div style={styles.subContainer}>
-            <span className="Body-2-b" style={{ color: colors.Level.Bronze }}>
-              {totalExperience.toLocaleString()}
-            </span>
-            <pre className="Body-2-b" style={{ color: colors.gray[600] }}>
-              {" "}
-              / {nextLevelExp.toLocaleString()}do
-            </pre>
-          </div>
-        </div>
-        <div style={theme.boxTheme.barContainer}>
-          <div
-            style={{
-              ...theme.boxTheme.colorbar,
-              width: `${percent}%`,
-              backgroundColor: colors.Level.Bronze,
-            }}
-          />
-        </div>
-        <div style={{ ...theme.boxTheme.rowContainer, marginTop: 8 }}>
-          <span className="label-1-r">{levelName}</span>
-          <div style={styles.subContainer}>
-            <span className="label-1-b" style={{ color: colors.Level.Bronze }}>
-              {`${remainExp.toLocaleString()}do`}
-            </span>
-            <pre className="label-1-r" style={{ color: colors.gray[600] }}>
-              {" "}
-              남았어요!
-            </pre>
-          </div>
-          <span className="label-1-r">{nextLevel}</span>
-        </div>
-      </div>
-
+      {/* content */}
+      <MyExpBox levelName={levelName} totalExperience={totalExperience} />
       <div style={theme.boxTheme.boxContainer}>
         <Content text1="사번" text2={employeeNumber} isMargin={true} />
         <Content text1="이름" text2={name} isMargin={true} />
@@ -179,7 +173,9 @@ const ProfileScreen = () => {
       </div>
       <div style={{ ...theme.boxTheme.boxContainer, marginBottom: 29 }}>
         <Content text1="아이디" text2={loginId} isMargin={true} />
-        <div style={theme.boxTheme.rowContainer}>
+        <div
+          style={{ ...theme.boxTheme.rowContainer, ...styles.marginBottom24 }}
+        >
           <span className="subtitle-1-bold">비밀번호 변경</span>
           <PressableButton
             onClick={() => navigate("/passwordchange")}
@@ -189,11 +185,10 @@ const ProfileScreen = () => {
           </PressableButton>
         </div>
         <div style={theme.boxTheme.rowContainer}>
-          <span className="subtitle-1-bold">알림 화면</span>
+          <span className="subtitle-1-bold">로그아웃</span>
           <PressableButton
-            onClick={() => navigate("/notification")}
+            onClick={handleLogout}
             pressedStyle={{ opacity: 0.5 }}
-            style={{ marginTop: 24 }}
           >
             <img src={Arrow} alt="arrow" />
           </PressableButton>

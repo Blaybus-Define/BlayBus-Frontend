@@ -8,9 +8,61 @@ import LevelChip from "../components/LevelChip";
 import LevelTableF from "../images/myexp/leveltable_f.png";
 import LevelTableB from "../images/myexp/leveltable_b.png";
 import LevelTableG from "../images/myexp/leveltable_g.png";
+import { customAxios } from "../customAxios";
+import { getTotalExpInfo } from "../CalcEx";
 
-const MyExpScreen = () => {
+const MyExpScreen = ({ myLevel }) => {
+  const level_color = {
+    "F1-I": colors.Level.Bronze,
+    "F1-Ⅱ": colors.Level.Bronze,
+    "F2-I": colors.Level.Sliver,
+    "F2-Ⅱ": colors.Level.Sliver,
+    "F2-Ⅲ": colors.Level.Sliver,
+    "F3-I": colors.Level.Gold,
+    "F3-Ⅱ": colors.Level.Gold,
+    "F3-Ⅲ": colors.Level.Gold,
+    "F4-I": colors.Level.Sapphier,
+    "F4-Ⅱ": colors.Level.Sapphier,
+    "F4-Ⅲ": colors.Level.Sapphier,
+    F5: colors.Level.Ruby,
+
+    B1: colors.Level.Bronze,
+    B2: colors.Level.Sliver,
+    B3: colors.Level.Gold,
+    B4: colors.Level.Sapphier,
+    B5: colors.Level.Ruby,
+    B6: colors.Level.Amethyst,
+
+    G1: colors.Level.Bronze,
+    G2: colors.Level.Sliver,
+    G3: colors.Level.Gold,
+    G4: colors.Level.Sapphier,
+    G5: colors.Level.Ruby,
+    G6: colors.Level.Amethyst,
+
+    T1: colors.Level.Bronze,
+    T2: colors.Level.Sliver,
+    T3: colors.Level.Gold,
+    T4: colors.Level.Sapphier,
+    T5: colors.Level.Ruby,
+    T6: colors.Level.Amethyst,
+  };
+
   const [tableVisible, setTableVisible] = useState(false);
+  const [annualExpPercents, setAnnualExpPercents] = useState([]);
+  const [firstHalfPerformanceExp, setFirstHalfPerformanceExp] = useState(0);
+  const [secondHalfPerformanceExp, setSecondHalfPerformanceExp] = useState(0);
+  const [jobRoleExp, setJobRoleExp] = useState(0);
+  const [leaderExp, setLeaderExp] = useState(0);
+  const [annualExp, setAnnualExp] = useState(0);
+  const [projectExp, setProjectExp] = useState(0);
+  const [previousExp, setPreviousExp] = useState(0);
+  // 올해 획득 가능한 경험치
+  const levelName =
+    myLevel && myLevel.length > 3
+      ? `${myLevel.slice(0, 2)} - ${myLevel.slice(3)}`
+      : myLevel;
+
   const tableRef = useRef(null);
 
   useEffect(() => {
@@ -25,6 +77,33 @@ const MyExpScreen = () => {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const loadExperiences = async () => {
+      try {
+        const { data } = await customAxios.get("/experiences/status");
+        console.log("Get experiences: ", data);
+        setFirstHalfPerformanceExp(data.firstHalfPerformanceExp);
+        setSecondHalfPerformanceExp(data.secondHalfPerformanceExp);
+        setJobRoleExp(data.jobRoleExp);
+        setLeaderExp(data.leaderExp);
+        setAnnualExp(data.annualExp);
+        setProjectExp(data.projectExp);
+        setPreviousExp(data.previousExp);
+
+        const percents = [
+          `${data.firstHalfPerformanceExp / 9000}%`,
+          `${data.secondHalfPerformanceExp / 9000}%`,
+          `${data.jobRoleExp / 9000}%`,
+          `${data.leaderExp / 9000}%`,
+        ];
+        setAnnualExpPercents(percents);
+      } catch (error) {
+        console.err("Get experiences: ", error);
+      }
+    };
+    loadExperiences();
   }, []);
 
   const ColorBar = ({ percent }) => {
@@ -138,15 +217,29 @@ const MyExpScreen = () => {
     );
   };
 
+  // 경험치 계산
+  const { nextLevel, nextLevelExp, remainExp, percent } = getTotalExpInfo(
+    myLevel,
+    annualExp + previousExp
+  );
+
   return (
-    <div className="page" style={theme.pinkPage.container}>
-      <div style={{ ...theme.pinkPage.head, marginBottom: 20 }}>
+    <div
+      className="page"
+      style={{
+        ...theme.pageTheme.container,
+        backgroundColor: colors.Primary.bg,
+        padding: "85px 20px 40px 20px",
+      }}
+    >
+      {/* header */}
+      <div style={theme.pageTheme.header}>
         <span className="title-3-bold">내 경험치</span>
       </div>
-      {/* 총 누적 경험치 */}
-      <div style={theme.boxTheme.boxContainer}>
+      {/* 총 획득 경험치 */}
+      <div style={{ ...theme.boxTheme.boxContainer, marginTop: 20 }}>
         <span className="Body-2-b" style={{ marginBottom: 4 }}>
-          총 누적 경험치
+          총 획득 경험치
         </span>
         <span style={styles.subText}>
           올해+작년 획득 총 경험치 / 다음 레벨 요구 경험치
@@ -159,34 +252,38 @@ const MyExpScreen = () => {
           }}
         >
           <div style={styles.subContainer}>
-            <span className="title-3-bold">85</span>
+            <span className="title-3-bold">{percent}</span>
             <span style={styles.percent}>%</span>
           </div>
           <div style={styles.subContainer}>
-            <span className="Body-2-b" style={{ color: colors.Level.Bronze }}>
-              12,657
+            <span className="Body-2-b" style={{ color: level_color[myLevel] }}>
+              {annualExp + previousExp}
             </span>
-            <pre style={styles.grayDo}> / 13,500do</pre>
+            <pre style={styles.grayDo}> / {nextLevelExp}do</pre>
           </div>
         </div>
         <div style={theme.boxTheme.barContainer}>
           <div
             style={{
               ...theme.boxTheme.colorbar,
-              width: "85%",
-              backgroundColor: colors.Level.Bronze,
+              width: `${(annualExp + previousExp) / nextLevelExp}%`,
+              backgroundColor: level_color[myLevel],
             }}
           />
         </div>
         <div style={{ ...theme.boxTheme.rowContainer, marginTop: 8 }}>
-          <span className="label-1-r">F1 - I</span>
+          <span className="label-1-r">{levelName}</span>
           <div style={styles.subContainer}>
-            <span className="label-1-b" style={{ color: colors.Level.Bronze }}>
-              863do
+            <span className="label-1-b" style={{ color: level_color[myLevel] }}>
+              {remainExp}do
             </span>
             <pre style={styles.subText}> 남았어요!</pre>
           </div>
-          <span className="label-1-r">F1 - II</span>
+          <span className="label-1-r">
+            {nextLevel && nextLevel.length > 3
+              ? `${nextLevel.slice(0, 2)} - ${nextLevel.slice(3)}`
+              : nextLevel}
+          </span>
         </div>
       </div>
       {/* 올해 획득한 경험치 */}
@@ -204,17 +301,17 @@ const MyExpScreen = () => {
           }}
         >
           <div style={styles.subContainer}>
-            <span className="title-3-bold">85</span>
+            <span className="title-3-bold">{Math.round(annualExp / 9000)}</span>
             <span style={styles.percent}>%</span>
           </div>
           <div style={styles.subContainer}>
-            <span style={styles.orangeDo}>7,657</span>
+            <span style={styles.orangeDo}>{annualExp}</span>
             <pre style={styles.grayDo}> / 9,000do</pre>
           </div>
         </div>
         <div style={{ ...theme.boxTheme.barContainer, margin: "12px 0px" }}>
           <div style={{ ...theme.boxTheme.colorbar, width: "100%" }}>
-            <ColorBar percent={["17%", "33%", "29%", "6%"]} />
+            <ColorBar percent={annualExpPercents} />
           </div>
         </div>
         <div
@@ -224,8 +321,8 @@ const MyExpScreen = () => {
             justifyContent: "space-between",
           }}
         >
-          {["17%", "33%", "29%", "6%"].map((percent, index) => (
-            <LabelEx percent={parseFloat(percent)} index={index} />
+          {annualExpPercents.map((percent, index) => (
+            <LabelEx key={index} percent={parseFloat(percent)} index={index} />
           ))}
         </div>
       </div>
@@ -236,7 +333,8 @@ const MyExpScreen = () => {
             올해 전사 프로젝트 경험치
           </span>
           <span style={styles.orangeDo}>
-            0<span style={styles.grayDo}>do</span>
+            {projectExp}
+            <span style={styles.grayDo}>do</span>
           </span>
         </div>
         <span style={styles.subText}>
@@ -259,19 +357,21 @@ const MyExpScreen = () => {
           }}
         >
           <div style={styles.subContainer}>
-            <span className="title-3-bold">37</span>
+            <span className="title-3-bold">
+              {Math.round(previousExp / nextLevelExp)}
+            </span>
             <span style={styles.percent}>%</span>
           </div>
           <div style={styles.subContainer}>
-            <span style={styles.orangeDo}>5,000</span>
-            <pre style={styles.grayDo}> / 13,500do</pre>
+            <span style={styles.orangeDo}>{previousExp}</span>
+            <pre style={styles.grayDo}> / {nextLevelExp}do</pre>
           </div>
         </div>
         <div style={theme.boxTheme.barContainer}>
           <div
             style={{
               ...theme.boxTheme.colorbar,
-              width: "37%",
+              width: `${previousExp / nextLevelExp}%`,
               backgroundColor: colors.orange[500],
             }}
           />
@@ -296,7 +396,13 @@ const MyExpScreen = () => {
             </PressableButton>
             {tableVisible && (
               <img
-                src={LevelTableF}
+                src={
+                  myLevel.slice(0, 1) === "F"
+                    ? LevelTableF
+                    : myLevel.slice(0, 1) === "B"
+                    ? LevelTableB
+                    : LevelTableG
+                }
                 alt="table"
                 style={{
                   width: 220,
@@ -321,15 +427,19 @@ const MyExpScreen = () => {
             <div
               style={{
                 ...theme.boxTheme.colorbar,
-                width: "20%",
-                backgroundColor: colors.Level.Bronze,
+                width: `${(annualExp + previousExp) / 162000}%`,
+                backgroundColor: level_color[myLevel],
                 height: 8,
               }}
             />
             <div
-              style={{ position: "absolute", zIndex: 10, left: `${20 - 10}%` }}
+              style={{
+                position: "absolute",
+                zIndex: 10,
+                left: `${((annualExp + previousExp) / 162000) * 100 - 4}%`,
+              }}
             >
-              <LevelChip text={"F1 - I"} color={colors.Level.Bronze} />
+              <LevelChip text={levelName} color={level_color[myLevel]} />
             </div>
           </div>
         </div>
@@ -341,14 +451,11 @@ const MyExpScreen = () => {
             padding: "0px 0px 0px 6px",
           }}
         >
-          {/* {(level.startsWith("F") ? [0, 1, 2, 3, 4] : [0, 1, 2, 3, 4, 5]).map(
+          {(myLevel.startsWith("F") ? [0, 1, 2, 3, 4] : [0, 1, 2, 3, 4, 5]).map(
             (n) => (
-              <LabelLevel fullLevel="F1-I" index={n} />
+              <LabelLevel key={n} fullLevel="F1-I" index={n} />
             )
-          )} */}
-          {[0, 1, 2, 3, 4].map((n) => (
-            <LabelLevel fullLevel="F1-I" index={n} />
-          ))}
+          )}
         </div>
       </div>
     </div>

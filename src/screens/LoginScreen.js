@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../App.css";
 import Logo from "../images/Logo.png";
+import visibility from "../images/visibility.png";
+import visibilityoff from "../images/visibility_off.png";
 import colors from "../colors/colors";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +14,7 @@ const LoginScreen = ({ setIsLogin }) => {
   const [focusedInput, setFocusedInput] = useState(null);
   const [showError, setShowError] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // 비밀번호 가시성 상태
 
   const navigate = useNavigate();
 
@@ -20,10 +23,13 @@ const LoginScreen = ({ setIsLogin }) => {
 
   const isButtonDisabled = !input1 || !input2;
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const handleLogin = async () => {
     try {
       const fcmToken = localStorage.getItem("fcmToken");
-
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/auth/login`,
         { loginId: input1, password: input2, fcmToken: fcmToken },
@@ -35,14 +41,17 @@ const LoginScreen = ({ setIsLogin }) => {
         toast.success("로그인 성공!", {
           duration: 1000,
         });
-        console.log("로그인 성공");
+        // 어드민 계정 설정
+        if (input1 === "admin" && input2 === "admin") {
+          localStorage.setItem("isAdmin", true);
+        } else {
+          localStorage.setItem("isAdmin", false);
+        }
         setIsLogin(true);
         setTimeout(() => navigate("/", { replace: true }), 0);
       }
     } catch (error) {
       console.log("로그인 POST 실패: ", error);
-
-      // 로그인 실패 UI
       setShowError(true);
       setFadeOut(false);
 
@@ -85,20 +94,28 @@ const LoginScreen = ({ setIsLogin }) => {
           borderColor: focusedInput === "input1" ? "black" : colors.gray[400],
         }}
       />
-      <input
-        type="password"
-        className="Body-1-r"
-        placeholder={"비밀번호"}
-        value={input2}
-        onChange={(event) => onChangeInput2(event.target.value)}
-        onFocus={() => setFocusedInput("input2")}
-        onBlur={() => setFocusedInput(null)}
-        style={{
-          ...styles.input,
-          ...styles.passwordInput,
-          borderColor: focusedInput === "input2" ? "black" : colors.gray[400],
-        }}
-      />
+      <div style={styles.passwordContainer}>
+        <input
+          type={showPassword ? "text" : "password"}
+          className="Body-1-r"
+          placeholder="비밀번호"
+          value={input2}
+          onChange={(event) => onChangeInput2(event.target.value)}
+          onFocus={() => setFocusedInput("input2")}
+          onBlur={() => setFocusedInput(null)}
+          style={{
+            ...styles.input,
+            ...styles.passwordInput,
+            borderColor: focusedInput === "input2" ? "black" : colors.gray[400],
+          }}
+        />
+        <img
+          src={showPassword ? visibilityoff : visibility}
+          alt="Toggle visibility"
+          onClick={togglePasswordVisibility}
+          style={styles.visibilityIcon}
+        />
+      </div>
       <button
         style={{
           ...styles.button,
@@ -122,7 +139,6 @@ const LoginScreen = ({ setIsLogin }) => {
       </button>
       <div style={styles.linksContainer}>
         <span style={styles.link}>아이디 찾기</span>
-
         <div style={styles.divider} />
         <span style={styles.link}>비밀번호 찾기</span>
       </div>
@@ -154,8 +170,23 @@ const styles = {
     outline: "none",
     transition: "border-color 0.3s",
   },
+  passwordContainer: {
+    position: "relative",
+    width: "calc(100% - 40px)",
+    maxWidth: 400,
+    display: "flex",
+    alignItems: "center",
+  },
   passwordInput: {
-    marginBottom: 24,
+    flex: 1,
+  },
+  visibilityIcon: {
+    position: "absolute",
+    right: 17,
+    cursor: "pointer",
+    marginBottom: "13px",
+    height: 24,
+    width: 24,
   },
   button: {
     display: "flex",
