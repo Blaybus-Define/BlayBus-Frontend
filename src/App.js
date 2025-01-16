@@ -14,11 +14,11 @@ import NoticeDetailScreen from "./screens/notice/NoticeDetailScreen";
 import NoticeScreen from "./screens/notice/NoticeScreen";
 import ProfileSettingScreen from "./screens/ProfileSettingScreen";
 import NotificationScreen from "./screens/NotificationScreen";
-// import { AliveScope, KeepAlive } from "react-activation";
 import { AliveScope } from "react-activation";
 import NoticeWriteScreen from "./screens/notice/NoticeWriteScreen";
 import QuestScreen from "./screens/QuestScreen";
 import ExperienceList from "./screens/ExperienceList";
+
 
 const Layout = () => (
   <div className="page">

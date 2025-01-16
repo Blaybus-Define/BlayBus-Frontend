@@ -14,6 +14,8 @@ import axios from "axios";
 
 import TaskIcon from "../images/exp/duty_image.png";
 import LeaderAssignmentIcon from "../images/exp/leader_image.png";
+import { theme } from "../themes/theme";
+import colors from "../colors/colors";
 
 const QuestScreen = () => {
   const [quests, setQuests] = useState([]);
@@ -92,9 +94,24 @@ const QuestScreen = () => {
   if (error) return <div>데이터를 가져오는 데 실패했습니다.</div>;
 
   return (
-    <div className="page" style={styles.container}>
+    <div
+      className="page"
+      style={{
+        ...theme.pageTheme.container,
+        backgroundColor: colors.Primary.bg,
+        padding: "162px 0px 40px 0px",
+      }}
+    >
       {/* Header Section */}
-      <div style={styles.headerAll}>
+      <div
+        style={{
+          ...theme.pageTheme.header,
+          height: 164,
+          flexDirection: "column",
+          backgroundColor: "#FFFBFA",
+          boxShadow: "0px 1px 8px rgba(159, 32, 0, 0.16)",
+        }}
+      >
         <div style={styles.headerSection}>
           <button style={styles.navButton} onClick={handlePreviousMonth}>
             <img src={LeftArrow} alt="Previous" style={styles.navIcon} />
@@ -114,7 +131,6 @@ const QuestScreen = () => {
             />
           </button>
         </div>
-
         {/* Tabs Section */}
         <div style={styles.tabsContainer}>
           {tabs.map((tab, index) => (
@@ -155,7 +171,6 @@ const QuestScreen = () => {
       <div style={styles.cardsContainer}>
         {quests && quests.length > 0 ? (
           quests.map((quest, index) => {
-            const isAchieved = quest.experience > 0;
             const icon =
               quest.questType === "TASK"
                 ? isAchieved
@@ -167,22 +182,23 @@ const QuestScreen = () => {
 
             const badgeText =
               quest.questType === "TASK" ? "직무별" : "리더부여";
+            const achievedLevel =
+              quest.achievedLevel === "NOT_ACHIEVED" ? "미완성" : quest.achievedLevel;
 
-            return (
-              <div key={index} style={styles.cardWrapper}>
-                <QuestExperience
-                  title={quest.title || "제목 없음"}
-                  badgeText={badgeText}
-                  maxBadgeText={quest.achievedLevel || "N/A"}
-                  month={quest.questFrequency || "주기 없음"}
-                  date={quest.date || "날짜 없음"}
-                  count={quest.description || "설명 없음"}
-                  points={quest.experience || 0}
-                  icon={icon}
-                  isGray={!isAchieved} // experience가 0일 경우 true로 전달
-                />
-              </div>
-            );
+              return (
+                <div key={index} style={styles.cardWrapper}>
+                  <QuestExperience
+                    title={quest.title || "제목 없음"}
+                    badgeText={badgeText}
+                    maxBadgeText={achievedLevel}
+                    month={quest.count|| ""} 
+                    date={quest.date || ""}
+                    count={quest.description || "설명 없음"}
+                    points={quest.experience || 0}
+                    icon={icon}
+                  />
+                </div>
+              );
           })
         ) : (
           <div>퀘스트 데이터가 없습니다.</div>

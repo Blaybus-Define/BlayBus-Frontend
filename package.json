@@ -2,16 +2,19 @@
   "name": "blaybus-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://blaybus-define.github.io/BlayBus-Frontend",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "axios": "^1.7.9",
     "firebase": "^11.1.0",
+    "gh-pages": "^6.3.0",
     "react": "^18.3.1",
     "react-activation": "^0.13.0",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.5.1",
+    "react-native": "^0.76.6",
     "react-router-dom": "^7.1.1",
     "react-scripts": "^5.0.1",
     "react-transition-group": "^4.4.5",
@@ -21,7 +24,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +44,7 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
+    ],
+    "proxy": "https://blaybus-define.zapto.org"
   }
 }

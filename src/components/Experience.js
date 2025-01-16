@@ -27,7 +27,7 @@ const Experience = ({
     PROJECT: ProjectIcon,
   };
 
-  const icon = badgeIcons[questType] || dart; // Default icon fallback
+  const icon = badgeIcons[questType] || dart; 
   const badgeContent =
     questType === "TASK" ? "직무별" : questType === "LEADER" ? "리더부여" : "평가";
 
@@ -51,8 +51,9 @@ const Experience = ({
       marginRight: "18px",
     },
     iconImage: {
-      height: "66px",
-      marginTop: "4px",
+      height: "56px",
+      width: "58px",
+      marginTop: "14px",
       objectFit: "fill",
     },
     details: {
@@ -102,7 +103,7 @@ const Experience = ({
     },
     monthBadge: {
       width: "32px",
-      display: "flex",
+      display: month ? "flex" : "none", // month가 없으면 렌더링하지 않음
       flexDirection: "column",
       alignItems: "center",
       background: "#EAEBEE",
@@ -173,7 +174,6 @@ const Experience = ({
         </div>
         <div style={styles.dateRow}>
           <span style={styles.date}>{date}</span>
-          <img src={dart} alt="Divider" style={styles.divider} />
           <span style={styles.count}>{count}</span>
         </div>
       </div>
